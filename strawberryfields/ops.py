@@ -1774,6 +1774,201 @@ class Vgate(Gate):
         # the backend API call cubic_phase is hbar-independent
         backend.cubic_phase(par_evaluate(gamma_prime), *reg)
 
+class xstring1(Gate):
+    r"""FIXME
+
+    .. math::
+        V(\gamma) = e^{i \frac{\gamma}{3 \hbar} \hat{x}^3}
+
+    .. warning::
+
+        * The cubic phase gate has lower accuracy than the Kerr gate at the same cutoff dimension.
+
+        * The cubic phase gate is **non-Gaussian**, and thus can only be used
+          in the Fock backends, *not* the Gaussian backend.
+
+    Args:
+        gamma (float): parameter
+
+    .. details::
+
+        .. warning::
+            The cubic phase gate can suffer heavily from numerical inaccuracies due to
+            finite-dimensional cutoffs in the Fock basis. The gate implementation in
+            Strawberry Fields is unitary, but it does not implement an exact cubic phase
+            gate. The Kerr gate provides an alternative non-Gaussian gate.
+
+        .. admonition:: Definition
+            :class: defn
+
+            .. math::
+                V(\gamma) = \exp\left(i \frac{\gamma}{3 \hbar} \x^3\right),
+                \quad V^\dagger(\gamma) \a V(\gamma) = \a +i\frac{\gamma}{2\sqrt{2/\hbar}} (\a +\ad)^2
+
+        It transforms the phase space as follows:
+
+        .. math::
+            V^\dagger(\gamma) \x V(\gamma) &= \x,\\
+            V^\dagger(\gamma) \p V(\gamma) &= \p +\gamma \x^2.
+    """
+
+    def __init__(self, s, exp):
+        super().__init__([s,exp])
+
+    def _apply(self, reg, backend, **kwargs):
+        p = par_evaluate(self.p)
+        if p[1]<0:
+            raise RuntimeError("exponents in xstring1 must be a non-negative integer")
+        if not isinstance(p[1],int):
+            raise RuntimeError("exponents in xstring1 must be an integer")
+        backend.xstring1(p[0],p[1], *reg)
+
+class xstring2(Gate):
+    r"""FIXME
+
+    .. math::
+        V(\gamma) = e^{i \frac{\gamma}{3 \hbar} \hat{x}^3}
+
+    .. warning::
+
+        * The cubic phase gate has lower accuracy than the Kerr gate at the same cutoff dimension.
+
+        * The cubic phase gate is **non-Gaussian**, and thus can only be used
+          in the Fock backends, *not* the Gaussian backend.
+
+    Args:
+        gamma (float): parameter
+
+    .. details::
+
+        .. warning::
+            The cubic phase gate can suffer heavily from numerical inaccuracies due to
+            finite-dimensional cutoffs in the Fock basis. The gate implementation in
+            Strawberry Fields is unitary, but it does not implement an exact cubic phase
+            gate. The Kerr gate provides an alternative non-Gaussian gate.
+
+        .. admonition:: Definition
+            :class: defn
+
+            .. math::
+                V(\gamma) = \exp\left(i \frac{\gamma}{3 \hbar} \x^3\right),
+                \quad V^\dagger(\gamma) \a V(\gamma) = \a +i\frac{\gamma}{2\sqrt{2/\hbar}} (\a +\ad)^2
+
+        It transforms the phase space as follows:
+
+        .. math::
+            V^\dagger(\gamma) \x V(\gamma) &= \x,\\
+            V^\dagger(\gamma) \p V(\gamma) &= \p +\gamma \x^2.
+    """
+    ns=2
+    def __init__(self, s, exp1,exp2):
+        super().__init__([s,exp1,exp2])
+
+    def _apply(self, reg, backend, **kwargs):
+        p = par_evaluate(self.p)
+        if p[1]<0 or p[2]<0:
+            raise RuntimeError("exponents in xstring2 must be non-negative")
+        if not isinstance(p[1],int) or not isinstance(p[2],int):
+            raise RuntimeError("exponents in xstring2 must be integers")
+        backend.xstring2(p[0],p[1],p[2], *reg)
+
+class xstring3(Gate):
+    r"""FIXME
+
+    .. math::
+        V(\gamma) = e^{i \frac{\gamma}{3 \hbar} \hat{x}^3}
+
+    .. warning::
+
+        * The cubic phase gate has lower accuracy than the Kerr gate at the same cutoff dimension.
+
+        * The cubic phase gate is **non-Gaussian**, and thus can only be used
+          in the Fock backends, *not* the Gaussian backend.
+
+    Args:
+        gamma (float): parameter
+
+    .. details::
+
+        .. warning::
+            The cubic phase gate can suffer heavily from numerical inaccuracies due to
+            finite-dimensional cutoffs in the Fock basis. The gate implementation in
+            Strawberry Fields is unitary, but it does not implement an exact cubic phase
+            gate. The Kerr gate provides an alternative non-Gaussian gate.
+
+        .. admonition:: Definition
+            :class: defn
+
+            .. math::
+                V(\gamma) = \exp\left(i \frac{\gamma}{3 \hbar} \x^3\right),
+                \quad V^\dagger(\gamma) \a V(\gamma) = \a +i\frac{\gamma}{2\sqrt{2/\hbar}} (\a +\ad)^2
+
+        It transforms the phase space as follows:
+
+        .. math::
+            V^\dagger(\gamma) \x V(\gamma) &= \x,\\
+            V^\dagger(\gamma) \p V(\gamma) &= \p +\gamma \x^2.
+    """
+    ns=3
+    def __init__(self, s, exp1,exp2,exp3):
+        super().__init__([s,exp1,exp2,exp3])
+
+    def _apply(self, reg, backend, **kwargs):
+        p = par_evaluate(self.p)
+        if p[1]<0 or p[2]<0 or p[3]<0:
+            raise RuntimeError("exponents in xstring3 must be non-negative")
+        if not isinstance(p[1],int) or not isinstance(p[2],int) or not isinstance(p[3],int):
+            raise RuntimeError("exponents in xstring3 must be integers")
+        backend.xstring3(p[0],p[1],p[2],p[3], *reg)
+
+class xstring4(Gate):
+    r"""FIXME
+
+    .. math::
+        V(\gamma) = e^{i \frac{\gamma}{3 \hbar} \hat{x}^3}
+
+    .. warning::
+
+        * The cubic phase gate has lower accuracy than the Kerr gate at the same cutoff dimension.
+
+        * The cubic phase gate is **non-Gaussian**, and thus can only be used
+          in the Fock backends, *not* the Gaussian backend.
+
+    Args:
+        gamma (float): parameter
+
+    .. details::
+
+        .. warning::
+            The cubic phase gate can suffer heavily from numerical inaccuracies due to
+            finite-dimensional cutoffs in the Fock basis. The gate implementation in
+            Strawberry Fields is unitary, but it does not implement an exact cubic phase
+            gate. The Kerr gate provides an alternative non-Gaussian gate.
+
+        .. admonition:: Definition
+            :class: defn
+
+            .. math::
+                V(\gamma) = \exp\left(i \frac{\gamma}{3 \hbar} \x^3\right),
+                \quad V^\dagger(\gamma) \a V(\gamma) = \a +i\frac{\gamma}{2\sqrt{2/\hbar}} (\a +\ad)^2
+
+        It transforms the phase space as follows:
+
+        .. math::
+            V^\dagger(\gamma) \x V(\gamma) &= \x,\\
+            V^\dagger(\gamma) \p V(\gamma) &= \p +\gamma \x^2.
+    """
+    ns=4
+    def __init__(self, s, exp1,exp2,exp3,exp4):
+        super().__init__([s,exp1,exp2,exp3,exp4])
+
+    def _apply(self, reg, backend, **kwargs):
+        p = par_evaluate(self.p)
+        if p[1]<0 or p[2]<0 or p[3]<0 or p[4]<0:
+            raise RuntimeError("exponents in xstring4 must be non-negative integers")
+        if not isinstance(p[1],int) or not isinstance(p[2],int) or not isinstance(p[3],int) or not isinstance(p[4],int):
+            raise RuntimeError("exponents in xstring4 must be integers")
+        backend.xstring4(p[0],p[1],p[2],p[3],p[4],*reg)
 
 class Kgate(Gate):
     r"""Kerr gate.
@@ -2204,6 +2399,66 @@ class CZgate(Gate):
             Command(CX, reg),
             Command(Rgate(np.pi / 2), reg[1]),
         ]
+
+class CZ2gate(Gate):
+    r"""Controlled phase gate in the position basis.
+
+    .. math::
+        \text{CZ}(s) =  \iint dx dy \: e^{i sxy/\hbar} \ket{x,y}\bra{x,y} = e^{i s \: \hat{x} \otimes \hat{x}/\hbar}
+
+    In the position basis it maps
+    :math:`\ket{x_1, x_2} \mapsto e^{i s x_1 x_2/\hbar} \ket{x_1, x_2}`.
+
+    Args:
+        s (float): phase shift multiplier
+
+    .. details::
+
+        .. admonition:: Definition
+            :class: defn
+
+            .. math::
+                \text{CZ}(s) =  \iint dx dy \: e^{i s x_1 x_2/\hbar }
+                \xket{x_1,x_2}\xbra{x_1,x_2} = \exp\left({i s \: \hat{x_1}
+                \otimes \hat{x_2} /\hbar}\right).
+
+        It is related to the addition gate by a :doc:`phase space rotation <strawberryfields.ops.Rgate>`
+        in the second mode:
+
+        .. math::
+            \text{CZ}(s) = R_{(2)}(\pi/2) \: \text{CX}(s) \: R_{(2)}^\dagger(\pi/2).
+
+        In the position basis
+        :math:`\text{CZ}(s) \xket{x_1, x_2} = e^{i  s x_1 x_2/\hbar} \xket{x_1, x_2}`.
+
+        We can also write the action of the controlled-phase gate on the
+        canonical operators:
+
+        .. math::
+            \text{CZ}(s)^\dagger \x_1 \text{CZ}(s) &= \x_1\\
+            \text{CZ}(s)^\dagger \p_1 \text{CZ}(s) &= \p_1+ s \ \x_2\\
+            \text{CZ}(s)^\dagger \x_2 \text{CZ}(s) &= \x_2\\
+            \text{CZ}(s)^\dagger \p_2 \text{CZ}(s) &= \p_2+ s \ \x_1 \\
+            \text{CZ}(s)^\dagger \hat{a}_1 \text{CZ}(s) &= \a_1+  i\frac{s}{2} (\ad_2 +  \a_2)\\
+            \text{CZ}(s)^\dagger \hat{a}_2 \text{CZ}(s) &= \a_2+  i\frac{s}{2} (\ad_1 +  \a_1)\\
+    """
+    ns = 2
+
+    def __init__(self, s=1):
+        super().__init__([s])
+
+#    def _decompose(self, reg, **kwargs):
+#        # phase-rotated CZ
+#        CX = CXgate(self.p[0])
+#        return [
+#            Command(Rgate(-np.pi / 2), reg[1]),
+#            Command(CX, reg),
+#            Command(Rgate(np.pi / 2), reg[1]),
+#        ]
+
+    def _apply(self, reg, backend, **kwargs):
+        p = par_evaluate(self.p)
+        backend.cz2(p[0], *reg)
 
 
 class CKgate(Gate):
@@ -3167,9 +3422,10 @@ shorthands = [
 # here we list different classes of operations for unit testing purposes
 
 zero_args_gates = (Fouriergate,)
-one_args_gates = (Xgate, Zgate, Rgate, Pgate, Vgate, Kgate, CXgate, CZgate, CKgate)
+one_args_gates = (Xgate, Zgate, Rgate, Pgate, Vgate, Kgate, CXgate, CZgate, CKgate, CZ2gate)
 two_args_gates = (Dgate, Sgate, BSgate, MZgate, S2gate)
-gates = zero_args_gates + one_args_gates + two_args_gates
+multi_args_gates = (xstring1,xstring1,xstring2,xstring3,xstring4)
+gates = zero_args_gates + one_args_gates + two_args_gates + multi_args_gates
 
 channels = (LossChannel, ThermalLossChannel, MSgate, PassiveChannel)
 

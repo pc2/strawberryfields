@@ -19,3 +19,6 @@ doc/code/api/*
 Pipfile*
 .vscode/
 .ipynb_checkpoints/*
+*.swp
+venv
+.python-version

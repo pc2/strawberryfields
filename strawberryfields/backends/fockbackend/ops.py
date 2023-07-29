@@ -24,8 +24,11 @@ import numpy as np
 from numpy import sqrt, sinh, cosh, tanh, array, exp
 from numpy.polynomial.hermite import hermval as H
 
+import scipy as sp
 from scipy.special import factorial as fac
 from scipy.linalg import expm as matrixExp
+from scipy.sparse.linalg import expm as matrixExpSparse
+from scipy.sparse import csc_matrix as Sparse
 
 from thewalrus.fock_gradients import (
     displacement as displacement_tw,
@@ -292,6 +295,103 @@ def cross_kerr(kappa, trunc):
     ret = np.diag(np.exp(1j * kappa * n1n2)).reshape([trunc] * 4).swapaxes(1, 2)
     return ret
 
+@functools.lru_cache()
+def cz2(s, hbar, trunc):
+    r"""
+    The cz gate without decompositions :math:`CZ(s)`.
+    """
+    a1_ = a(trunc)
+    x1 = (a1_ + np.conj(a1_).T) * np.sqrt(hbar / 2)
+    a2_ = a(trunc)
+    x2 = (a2_ + np.conj(a2_).T) * np.sqrt(hbar / 2)
+    w = np.kron(x1, x2)
+    ret = matrixExp(1j*s*w/hbar).reshape([trunc] * 4).swapaxes(1, 2)
+    return ret
+
+def xstring1(s, exp1, hbar, trunc):
+    r"""
+    a string of x-operators with exponents exp without decompositions :math:`x(s)`.
+    """
+    a1_ = a(trunc)
+    x1 = (a1_ + np.conj(a1_).T) * np.sqrt(hbar / 2)
+    y1=np.eye(x1.shape[0])
+    for j in range(exp1):
+        y1=y1@x1
+    ret = matrixExp(1j * s / (hbar) * y1)
+    return ret
+
+def xstring2(s, exp1, exp2, hbar, trunc):
+    r"""
+    a string of x-operators with exponents exp without decompositions :math:`x(s)`.
+    """
+    a1_ = a(trunc)
+    x1 = (a1_ + np.conj(a1_).T) * np.sqrt(hbar / 2)
+    y1=np.eye(x1.shape[0])
+    for j in range(exp1):
+        y1=y1@x1
+    a2_ = a(trunc)
+    x2 = (a2_ + np.conj(a2_).T) * np.sqrt(hbar / 2)
+    y2=np.eye(x2.shape[0])
+    for j in range(exp2):
+        y2=y2@x2
+    w = np.kron(y1,y2)
+    ret = matrixExp(1j*s*w/hbar).reshape([trunc] * 4).swapaxes(1, 2)
+    return ret
+
+def xstring3(s, exp1, exp2, exp3, hbar, trunc):
+    r"""
+    a string of x-operators with exponents exp without decompositions :math:`x(s)`.
+    """
+    a1_ = a(trunc)
+    x1 = Sparse((a1_ + np.conj(a1_).T) * np.sqrt(hbar / 2))
+    y1=np.eye(x1.shape[0])
+    for j in range(exp1):
+        y1=y1@x1
+    a2_ = a(trunc)
+    x2 = Sparse((a2_ + np.conj(a2_).T) * np.sqrt(hbar / 2))
+    y2=np.eye(x2.shape[0])
+    for j in range(exp2):
+        y2=y2@x2
+    a3_ = a(trunc)
+    x3 = Sparse((a3_ + np.conj(a3_).T) * np.sqrt(hbar / 2))
+    y3=np.eye(x3.shape[0])
+    for j in range(exp3):
+        y3=y3@x3
+    w = sp.sparse.kron(y1,y2,format="csc")
+    w = sp.sparse.kron(w,y3,format="csc")
+    #ret = matrixExp(1j*s*w/hbar).reshape([trunc] * 6).swapaxes(1, 2)
+    ret = matrixExpSparse(1j*s*w/hbar).toarray().reshape([trunc] * 6).swapaxes(1,2).swapaxes(1,4).swapaxes(1,3)
+    return ret
+
+def xstring4(s, exp1, exp2, exp3, exp4, hbar, trunc):
+    r"""
+    a string of x-operators with exponents exp without decompositions :math:`x(s)`.
+    """
+    a1_ = a(trunc)
+    x1 = Sparse((a1_ + np.conj(a1_).T) * np.sqrt(hbar / 2))
+    y1=np.eye(x1.shape[0])
+    for j in range(exp1):
+        y1=y1@x1
+    a2_ = a(trunc)
+    x2 = Sparse((a2_ + np.conj(a2_).T) * np.sqrt(hbar / 2))
+    y2=np.eye(x2.shape[0])
+    for j in range(exp2):
+        y2=y2@x2
+    a3_ = a(trunc)
+    x3 = Sparse((a3_ + np.conj(a3_).T) * np.sqrt(hbar / 2))
+    y3=np.eye(x3.shape[0])
+    for j in range(exp3):
+        y3=y3@x3
+    a4_ = a(trunc)
+    x4 = Sparse((a4_ + np.conj(a4_).T) * np.sqrt(hbar / 2))
+    y4=np.eye(x4.shape[0])
+    for j in range(exp4):
+        y4=y4@x4
+    w = sp.sparse.kron(y1,y2,format="csc")
+    w = sp.sparse.kron(w,y3,format="csc")
+    w = sp.sparse.kron(w,y4,format="csc")
+    ret = matrixExpSparse(1j*s*w/hbar).toarray().reshape([trunc] * 8).swapaxes(1,2).swapaxes(1,4).swapaxes(3,6).swapaxes(3,5)
+    return ret
 
 @functools.lru_cache()
 def cubicPhase(gamma, hbar, trunc):

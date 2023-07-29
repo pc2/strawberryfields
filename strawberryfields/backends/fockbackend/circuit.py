@@ -589,6 +589,41 @@ class Circuit:
         """
         mat = ops.cross_kerr(kappa, self._trunc)
         self._state = self.apply_gate_BLAS(mat, [mode1, mode2])
+    
+    def cz2(self, s, mode1, mode2):
+        """
+        Applies a CZ gate without a decomposition.
+        """
+        mat = ops.cz2(s, self._hbar ,self._trunc)
+        self._state = self.apply_gate_BLAS(mat, [mode1, mode2])
+    
+    def xstring1(self, s, exp1, mode1):
+        """
+        Applies a x_mode1^exp1 gate without a decomposition.
+        """
+        mat = ops.xstring1(s, exp1, self._hbar ,self._trunc)
+        self._state = self.apply_gate_BLAS(mat, [mode1])
+    
+    def xstring2(self, s, exp1, exp2, mode1, mode2):
+        """
+        Applies a x_mode1^exp1 x_mode2^exp2 gate without a decomposition.
+        """
+        mat = ops.xstring2(s, exp1, exp2, self._hbar ,self._trunc)
+        self._state = self.apply_gate_BLAS(mat, [mode1, mode2])
+    
+    def xstring3(self, s, exp1, exp2, exp3, mode1, mode2, mode3):
+        """
+        Applies a x_mode1^exp1 x_mode2^exp2 x_mode3^exp3 gate without a decomposition.
+        """
+        mat = ops.xstring3(s, exp1, exp2, exp3, self._hbar ,self._trunc)
+        self._state = self.apply_gate_BLAS(mat, [mode1, mode2, mode3])
+    
+    def xstring4(self, s, exp1, exp2, exp3, exp4, mode1, mode2, mode3, mode4):
+        """
+        Applies a x_mode1^exp1 x_mode2^exp2 x_mode3^exp3 x_mode4^exp4 gate without a decomposition.
+        """
+        mat = ops.xstring4(s, exp1, exp2, exp3, exp4, self._hbar ,self._trunc)
+        self._state = self.apply_gate_BLAS(mat, [mode1, mode2, mode3, mode4])
 
     def cubic_phase_shift(self, gamma, mode):
         """

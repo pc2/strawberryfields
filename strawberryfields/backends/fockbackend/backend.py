@@ -287,6 +287,31 @@ class FockBackend(BaseFock):
             kappa, self._remap_modes(mode1), self._remap_modes(mode2)
         )
 
+    def cz2(self, s, mode1, mode2):
+        self.circuit.cz2(
+            s, self._remap_modes(mode1), self._remap_modes(mode2)
+        )
+    
+    def xstring1(self, s, exp1, mode1):
+        self.circuit.xstring1(
+            s, exp1, self._remap_modes(mode1)
+        )
+    
+    def xstring2(self, s, exp1, exp2, mode1, mode2):
+        self.circuit.xstring2(
+            s, exp1, exp2, self._remap_modes(mode1), self._remap_modes(mode2)
+        )
+    
+    def xstring3(self, s, exp1, exp2, exp3, mode1, mode2, mode3):
+        self.circuit.xstring3(
+            s, exp1, exp2, exp3, self._remap_modes(mode1), self._remap_modes(mode2), self._remap_modes(mode3)
+        )
+    
+    def xstring4(self, s, exp1, exp2, exp3, exp4, mode1, mode2, mode3, mode4):
+        self.circuit.xstring4(
+            s, exp1, exp2, exp3, exp4, self._remap_modes(mode1), self._remap_modes(mode2), self._remap_modes(mode3), self._remap_modes(mode4)
+        )
+
     def measure_fock(self, modes, shots=1, select=None, **kwargs):
         if shots != 1:
             raise NotImplementedError(
