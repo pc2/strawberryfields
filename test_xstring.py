@@ -8,7 +8,7 @@ from strawberryfields.ops import *
 from itertools import permutations
 from sympy.combinatorics.permutations import Permutation
 
-cutoff=8
+cutoff=5
 
 print("testing identity")
 prog1 = sf.Program(2)
@@ -100,8 +100,10 @@ with prog2.context as q:
     Fock(3) | q[1]
     #CZ2gate(s) | (q[0],q[1])
     xstring2(s,1,1) | (q[0],q[1])
-results1 = eng.run(prog1)
-results2 = eng.run(prog2)
+eng1 = sf.Engine("fock", backend_options={"cutoff_dim": cutoff})
+results1 = eng1.run(prog1)
+eng2 = sf.Engine("fock", backend_options={"cutoff_dim": cutoff})
+results2 = eng2.run(prog2)
 probs1=results1.state.all_fock_probs()
 probs2=results2.state.all_fock_probs()
 print("sum probs1",np.sum(probs1))

@@ -19,6 +19,7 @@ import copy
 import string
 import numbers
 from itertools import product
+import os
 
 import numpy as np
 from numpy import sqrt, pi
@@ -777,6 +778,7 @@ class Circuit:
             # the recursive relation H_0(x) = 1, H_1(x) = 2x, H_{n+1}(x) = 2xH_n(x) - 2nH_{n-1}(x)
             q_mag = kwargs.get("max", 10)
             num_bins = kwargs.get("num_bins", 100000)
+            twrite = kwargs.get("twrite", False)
 
             q_tensor, Hvals = ops.hermiteVals(q_mag, num_bins, m_omega_over_hbar, self._trunc)
             H_matrix = np.zeros((self._trunc, self._trunc, num_bins))
@@ -796,11 +798,15 @@ class Circuit:
             # Numpy also does not use the log probabilities
             probs = rho_dist.flatten().real
             probs /= np.sum(probs)
-
             # Due to floating point precision error, values in the calculated probability distribution
             # may have a very small negative value of -epsilon. The following sets
             # these small negative values to 0.
             probs[np.abs(probs) < 1e-10] = 0
+            
+            #if twrite:
+            print(len(probs),len(q_tensor))
+            np.savetxt('probs.npy', np.array(probs))
+            np.savetxt('q_tensor.npy', np.array(q_tensor))
 
             sample_hist = np.random.multinomial(1, probs)
             sample_idx = list(sample_hist).index(1)
@@ -834,6 +840,7 @@ class Circuit:
 
         # `homodyne_sample` will always be a single value since multiple shots is not supported
         return np.array([[homodyne_sample]])
+        #return ([[homodyne_sample,probs,q_tensor]])
 
     def prepare_gkp(self, theta, phi, epsilon, ampl_cutoff, mode):
         """
